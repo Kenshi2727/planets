@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planetary Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-800 to-gray-900 text-white font-sans">
+  <nav class="sticky top-0 z-50 flex items-center justify-between p-4 bg-gradient-to-r from-gray-900 to-gray-800 shadow-xl">
+    <div class="text-2xl font-bold uppercase bg-gradient-to-r from-sky-400 to-purple-400 bg-clip-text text-transparent">
+      Planetary Dashboard
+    </div>
+    <ul class="hidden space-x-6 md:flex">
+      <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">Home</a></li>
+      <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">About</a></li>
+      <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">Dashboard</a></li>
+      <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">Contact</a></li>
+    </ul>
+    <div class="block text-2xl md:hidden" id="menu-toggle">&#9776;</div>
+  </nav>
+  <ul class="hidden flex-col space-y-4 p-4 bg-gradient-to-br from-gray-900 to-gray-800 shadow-xl md:hidden" id="mobile-menu">
+    <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">Home</a></li>
+    <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">About</a></li>
+    <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">Dashboard</a></li>
+    <li><a href="#" class="text-white transition hover:text-sky-400 hover:shadow-sky-400">Contact</a></li>
+  </ul>
+
+  <main class="flex flex-col items-center justify-center min-h-screen">
+    <h1 class="mb-8 text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-purple-500">
+      Dynamic Planetary Position Dashboard
+    </h1>
+    <div id="planet-container" class="w-full h-[800px] bg-black rounded-lg shadow-lg"></div>
+  </main>
+
+  <script>
+    function setup() {
+      const canvas = createCanvas(windowWidth, 800);
+      canvas.parent('planet-container');
+    }
+  
+    function draw() {
+      background(0);
+      translate(width / 2, height / 2);
+  
+      // Draw the Sun
+      noStroke();
+      fill(255, 204, 0);
+      ellipse(0, 0, 80, 80);
+      fill(255);
+      textAlign(CENTER, CENTER);
+      text('Sun', 0, 50);
+  
+      // Define planets and orbits
+      const planets = [
+        { name: 'Mercury', a: 100, b: 80, size: 10, speed: 0.02, color: 'gray' },
+        { name: 'Venus', a: 140, b: 110, size: 15, speed: 0.015, color: 'yellow' },
+        { name: 'Earth', a: 180, b: 140, size: 18, speed: 0.01, color: 'blue' },
+        { name: 'Mars', a: 220, b: 170, size: 12, speed: 0.008, color: 'red' },
+        { name: 'Jupiter', a: 300, b: 240, size: 40, speed: 0.005, color: 'orange' },
+        { name: 'Saturn', a: 380, b: 300, size: 35, speed: 0.004, color: 'gold' },
+        { name: 'Uranus', a: 450, b: 350, size: 30, speed: 0.003, color: 'lightblue' },
+        { name: 'Neptune', a: 520, b: 400, size: 28, speed: 0.002, color: 'blue' },
+      ];
+  
+      // Draw orbits
+      noFill();
+      stroke(255, 100);
+      planets.forEach((planet) => {
+        ellipse(0, 0, planet.a * 2, planet.b * 2);
+      });
+  
+      // Draw asteroid belt
+      noStroke();
+      fill(150);
+      for (let i = 0; i < 300; i++) {
+        const angle = random(TWO_PI);
+        const distance = random(250, 280); // Asteroid belt range between Mars and Jupiter
+        const x = cos(angle) * distance;
+        const y = sin(angle) * (distance * 0.8); // Elliptical scaling
+        ellipse(x, y, 3, 3); // Small size for asteroids
+      }
+  
+      // Draw planets
+      planets.forEach((planet) => {
+        const angle = frameCount * planet.speed;
+        const x = cos(angle) * planet.a;
+        const y = sin(angle) * planet.b;
+  
+        // Draw planet
+        noStroke();
+        fill(planet.color);
+        ellipse(x, y, planet.size, planet.size);
+  
+        // Add planet name
+        fill(255);
+        textAlign(CENTER, CENTER);
+        text(planet.name, x, y + planet.size / 2 + 10);
+      });
+    }
+  
+    function windowResized() {
+      resizeCanvas(windowWidth, 800);
+    }
+  </script>
+  
+  
+</body>
+</html>
